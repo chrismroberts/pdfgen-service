@@ -9,6 +9,12 @@ docker build -t pdf-gen-service .
 docker run --rm -it -p 3000:3000 -e AZURE_STORAGE_CONNECTION=<storage connection string> pdf-gen-service
 ```
 
+Or:
+
+```
+docker run --rm -it -p 3000:3000 -e AZURE_STORAGE_CONNECTION=<storage connection string> chrismroberts/pdfgen-service
+```
+
 If you don't specify the `AZURE_STORAGE_CONNECTION` the service will start, but the only available output will be as a file download (with `Content-Disposition` header set)
 
 #### Request Format
@@ -29,7 +35,7 @@ To create and download a PDF, use the following request format:
     "output": "response",
     "options": {
         "orientation": "landscape"
-        ...
+        /* ... */
     }
 }
 ```
@@ -44,7 +50,7 @@ To create a PDF and upload straight to an Azure Storage blob:
     "filename": "subfolder/dave.pdf",
     "options": {
         "orientation": "landscape"
-        ...
+        /* ... */
     }
 }
 ```
