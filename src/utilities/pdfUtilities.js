@@ -1,3 +1,4 @@
+const stream = require('stream')
 const pdf = require('html-pdf')
 
 module.exports = {
@@ -14,7 +15,7 @@ module.exports = {
             })
         })
     },
-    convertHTMLToPDFAsBuffer: function (html, options) {
+    convertHTMLToPDFAsBuffer(html, options) {
         return new Promise((resolve, reject) => {
             pdf.create(html, options).toBuffer((error, buffer) => {
                 if (error) {
