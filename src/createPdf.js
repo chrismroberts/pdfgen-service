@@ -38,7 +38,7 @@ module.exports = async (request, response) => {
             let stream = await pdfUtils.convertHtmlToPdfAsStream(inputHtml, convertOpts)
             let filename = body.filename || 'output.pdf'
             response.setHeader('Content-Disposition', `attachment: filename=${filename}`)
-            
+
             stream.on('end', () => { response.end() })
             stream.pipe(response)
 
@@ -66,10 +66,7 @@ module.exports = async (request, response) => {
 
         // All present and correct, convert to PDF and upload
         try {
-            let pdfBuffer = await pdfUtils.convertHTMLToPDFAsBuffer(inputHtml, convertOpts)
-            let blobStream = new stream.PassThrough()
-            blobStream.end(pdfBuffer)
-            
+            let blobStream = await pdfUtils.convertHtmlToPdfAsStream(inputHtml, convertOpts)            
             await StorageConnector.createContainerIfNotExists(container)
             await StorageConnector.uploadBlobFromStream(container, filename, blobStream, blobStream.readableLength)
 
