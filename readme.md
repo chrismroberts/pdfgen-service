@@ -12,7 +12,7 @@ docker run --rm -it -p 3000:3000 -e AZURE_STORAGE_CONNECTION=<storage connection
 Or:
 
 ```
-docker run --rm -it -p 3000:3000 -e AZURE_STORAGE_CONNECTION=<storage connection string> chrismroberts/pdfgen-service
+docker run --rm -it -p 3000:3000 -e AZURE_STORAGE_CONNECTION=<storage connection string> chrismroberts/pdfgen-service:0.1.0
 ```
 
 If you don't specify the `AZURE_STORAGE_CONNECTION` the service will start, but the only available output will be as a file download (with `Content-Disposition` header set)
