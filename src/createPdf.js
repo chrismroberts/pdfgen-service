@@ -1,4 +1,5 @@
 const stream = require('stream')
+const axios = require('axios')
 const pdfUtils = require('./utilities/pdfUtilities')
 
 const ValidationSchema = require('validate')
@@ -10,9 +11,12 @@ module.exports = async (request, response) => {
 
     let schema = new ValidationSchema({
         html: { 
-            type: String, 
-            required: true, 
-            message: `html is required and must be a Base64 encoded string`
+            type: String,       
+            message: `'html' must be a Base64 encoded string`
+        },
+        url: {
+            type: String,
+            message: `'url' must be a string`
         },
         output: {
             type: String, 
@@ -30,7 +34,31 @@ module.exports = async (request, response) => {
         return response.status(400).send(validationErrors.map(err => err.message))
     }
 
-    let inputHtml = Buffer.from(body.html, 'base64').toString()
+    let inputHtml = ''
+
+    if (body.html) {
+        inputHtml = Buffer.from(body.html, 'base64').toString()
+    }
+    else if (body.url) {
+        try {
+            let urlResponse = await axios.default.get(body.url)
+            inputHtml = urlResponse.data
+            
+        } catch (error) {
+            if (error.isAxiosError) {
+                let statusCodeInfo = error.response && error.response.status ? ` (Status ${error.response.status})` : ''
+                return response.status(400).send([
+                    `Error getting HTML from ${body.url}${statusCodeInfo}. Response: ${error.message}`
+                ])
+            }
+            
+            return response.status(500).send([`Unknown error while downloading from ${body.url}: ${error.message}`])
+        }
+    }
+    else {
+        return response.status(400).send([`Must specify Base64 encoded HTML string as 'html' or URL to HTML document as 'url'`])
+    }
+
     let convertOpts = body.options || { }
 
     if (body.output == 'response') {
