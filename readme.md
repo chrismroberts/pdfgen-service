@@ -19,7 +19,7 @@ If you don't specify the `AZURE_STORAGE_CONNECTION` the service will start, but 
 
 #### Request Format
 
-The service accepts `application/json` formatted requests on the root, e.g. `http://localhost:3000`. HTML you wish to convert to PDF must be Base64 encoded before sending in the request, e.g:
+The service accepts `application/json` formatted POST requests on the root, e.g. `http://localhost:3000`. HTML you wish to convert to PDF must be Base64 encoded before sending in the request, e.g:
 
 `<h2>Open the pod bay doors, Hal</h2>`
 
@@ -27,8 +27,13 @@ Becomes:
 
 `PGgyPk9wZW4gdGhlIHBvZCBiYXkgZG9vcnMsIEhhbDwvaDI+`
 
-To create and download a PDF, use the following request format:
+To create and download a PDF, use the following request and format:
 
+```
+POST http://localhost:3000/
+``` 
+
+Body:
 ```json
 {
     "html": "PGgyPk9wZW4gdGhlIHBvZCBiYXkgZG9vcnMsIEhhbDwvaDI+",    
